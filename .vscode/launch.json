@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Orchestrator",
+      "request": "launch",
+      "mainClass": "com.example.orchestrator.OrchestratorApplication",
+      "projectName": "orchestrator"
+    },
+    {
+      "type": "java",
+      "name": "Inventory Worker",
+      "request": "launch",
+      "mainClass": "com.example.inventory.InventoryWorkerApplication",
+      "projectName": "inventory-worker"
+    },
+    {
+      "type": "java",
+      "name": "Payment Worker",
+      "request": "launch",
+      "mainClass": "com.example.payment.PaymentWorkerApplication",
+      "projectName": "payment-worker"
+    },
+    {
+      "type": "java",
+      "name": "Order Worker",
+      "request": "launch",
+      "mainClass": "com.example.order.OrderWorkerApplication",
+      "projectName": "order-worker"
+    }
+  ]
+}

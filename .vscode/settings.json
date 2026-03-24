@@ -1,0 +1,15 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "editor.inlayHints.enabled": "on",
+  "files.trimTrailingWhitespace": true,
+  "rest-client.previewOption": "exchange",
+  "files.associations": { "*.http": "http" },
+  "files.exclude": {
+    "**/target": true,
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  }
+}

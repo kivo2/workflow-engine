@@ -1,0 +1,77 @@
+@baseUrl = http://localhost:8080
+
+### Health check
+GET {{baseUrl}}/actuator/health
+
+### Happy path — COMPLETED
+# @name happyPath
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{
+  "customerId": "cust_123",
+  "items": [{"productId": "prod_1", "quantity": 2}],
+  "paymentMethod": {"type": "card", "token": "tok_abc"}
+}
+
+### Poll status
+GET {{baseUrl}}/checkout/{{happyPath.response.body.sagaId}}
+
+### PERMANENT failure — Payment declined (tok_declined) → FAILED, no retry
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{
+  "customerId": "cust_123",
+  "items": [{"productId": "prod_1", "quantity": 1}],
+  "paymentMethod": {"type": "card", "token": "tok_declined"}
+}
+
+### TRANSIENT failure — Payment error (tok_error) → PENDING_RETRY
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{
+  "customerId": "cust_123",
+  "items": [{"productId": "prod_1", "quantity": 1}],
+  "paymentMethod": {"type": "card", "token": "tok_error"}
+}
+
+### Out of stock — prod_3 has 0 qty → InsufficientStockException → FAILED
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{
+  "customerId": "cust_123",
+  "items": [{"productId": "prod_3", "quantity": 1}],
+  "paymentMethod": {"type": "card", "token": "tok_abc"}
+}
+
+### Partial stock — prod_2 has only 3 qty, requesting 10 → FAILED
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{
+  "customerId": "cust_123",
+  "items": [{"productId": "prod_2", "quantity": 10}],
+  "paymentMethod": {"type": "card", "token": "tok_abc"}
+}
+
+### Transient failure in order worker
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{
+  "customerId": "cust_error",
+  "items": [{"productId": "prod_1", "quantity": 1}],
+  "paymentMethod": {"type": "card", "token": "tok_abc"}
+}
+
+### Validation — missing fields → 400
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{"customerId":"","items":[],"paymentMethod":null}
+
+### Not found → 404
+GET {{baseUrl}}/checkout/00000000-0000-0000-0000-000000000000
