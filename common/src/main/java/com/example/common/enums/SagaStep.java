@@ -1,0 +1,14 @@
+package com.example.common.enums;
+
+public enum SagaStep {
+  RESERVE_INVENTORY,
+  AUTHORIZE_PAYMENT,
+  CREATE_ORDER,
+
+  COMPLETED,
+  FAILED,
+
+  RELEASE_INVENTORY,
+  REFUND_PAYMENT,
+  CANCEL_ORDER
+}
