@@ -1,0 +1,72 @@
+spring:
+  application:
+    name: orchestrator
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orchestratordb
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        spring.json.add.type.headers: false
+    admin:
+      fail-fast: true
+
+kafka:
+  enabled: true
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: always
+
+retry:
+  base-delay-ms: 1000
+  max-delay-ms: 30000
+  max-retries: 3
+  scheduler-interval-ms: 1000
+  scheduler:
+    batch-size: 100
+
+stuck:
+  detector:
+    auto-enabled: true
+    interval-ms: 10000
+    timeout-ms: 60000
+    batch-size: 100
+
+outbox:
+  relay:
+    enabled: true
+    poll-interval-ms: 500
+    batch-size: 100
+
+logging:
+  level:
+    com.example: DEBUG
+    org.springframework: INFO
